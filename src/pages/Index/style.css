@@ -1,0 +1,48 @@
+.site-layout-content {
+  min-height: 80vh;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  .head {
+    width: 100%;
+    background-color: #eee8aa;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .head_stock {
+    background-color: aquamarine;
+    flex: 1;
+    height: 100px;
+    margin: 0 2px;
+  }
+
+  .list {
+    margin: 0 10px;
+  }
+
+  .home_search_block {
+    margin: 10px 0;
+    .ant-form-item {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.top_inner{
+  width: 800px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 50px;
+  justify-content: space-between;
+}
+
+.menu_wrapper{
+ 
+}
+.top_input_wrapper{
+  height: 35px;
+  width: 300px !important;
+}
