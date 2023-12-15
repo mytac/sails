@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Button } from 'antd';
-import { parseUrlSearchParams } from '../../utils';
+import { Form, Input, Button,message } from 'antd';
+import { parseUrlSearchParams } from '@utils/index';
+import request from '@utils/request';
+import {useHistory} from 'react-router'
 import './style.css';
 
 const Regist: React.FC = () => {
 
   const [form]=Form.useForm()
+  const history=useHistory()
 
   useEffect(() => {
     // 请求
@@ -13,8 +16,20 @@ const Regist: React.FC = () => {
     console.log('search', search);
   }, []);
 
-  const onFinish=()=>{
-    
+  const onFinish= async (values:any)=>{
+    console.log('values',values)
+    try{
+    const {username,password,confirm,email}=values
+    if(password!==confirm){
+      message.error("密码不一致，请重新输入！")
+    }else{
+      await request('/register/','post',{username,password,email})
+      message.success("注册成功，请重新登陆")
+      history.push('/login')
+    }
+    }catch(err){
+      console.log(err)
+    }
   }
 
   return (
@@ -50,6 +65,14 @@ const Regist: React.FC = () => {
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
           <Input.Password />
+        </Form.Item>
+
+        <Form.Item
+          label="邮箱"
+          name="email"
+          rules={[{ required: true, message: 'Please input your email!' }]}
+        >
+          <Input />
         </Form.Item>
 
 
