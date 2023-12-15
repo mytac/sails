@@ -1,26 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import {Link} from 'react-router-dom'
-import {
-  Table,
-  Button,
-  Form,
-  Input,
-  Row,
-} from 'antd';
-
+import {Table,Button,message} from 'antd';
+import request from '@utils/request';
 import { mockdata } from './config';
+import { UserContext } from '../../App';  
+
 import './style.css';
 
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
-};
 
 const App: React.FC = () => {
-  const [form] = Form.useForm();
+  const userContext = React.useContext(UserContext);
+  const { userInfo } = userContext;
 
-  const queryStockList=()=>{
+  const [stockList,setStockList]=useState([])
 
+  const queryStockList=async ()=>{
+    try{
+      if(userInfo?.userId){
+        const {stockList}=await request('/selectStock/','post',{})
+        setStockList(stockList)
+      }else{
+        message.error("请先登录查看自选股")
+      }
+      
+    }catch(err){
+    }
   }
 
 
@@ -37,28 +41,28 @@ const App: React.FC = () => {
     },
     {
       title: '代码',
-      dataIndex: 'code',
-      key: 'code',
+      dataIndex: 'ts_code',
+      key: 'ts_code',
     },
     {
       title: '现价',
-      dataIndex: 'value',
-      key: 'value',
+      dataIndex: 'close',
+      key: 'close',
     },
     {
       title: '涨跌幅',
-      dataIndex: 'delta',
-      key: 'delta',
+      dataIndex: 'pct_chg',
+      key: 'pct_chg',
     },
     {
-      title: '总市值',
-      dataIndex: 'delta',
-      key: 'delta',
+      title: '所属行业',
+      dataIndex: 'industry',
+      key: 'industry',
     },
     {
       title: '操作',
-      dataIndex: 'code',
-      key: 'code',
+      dataIndex: 'ts_code',
+      key: 'ts_code',
       render: (code:string) => {
         return (
           <div className="table_ops_wrapper">
@@ -112,7 +116,7 @@ const App: React.FC = () => {
               </Form> */}
               
             </div>
-            <Table columns={columns} dataSource={mockdata} />
+            <Table columns={columns} dataSource={stockList} />
           </div>
         </>
   );

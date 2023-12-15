@@ -1,13 +1,6 @@
-import React,{useState} from 'react';
-import {Route,Redirect,Switch,BrowserRouter,useHistory} from 'react-router-dom'
-import {  Breadcrumb,
-  Layout,
-  Menu,
-  Table,
-  Button,
-  Form,
-  Input,
-  Row,} from 'antd'
+import React,{useState,createContext} from 'react';
+import {Route,Switch,BrowserRouter,useHistory} from 'react-router-dom'
+import {  Breadcrumb,Layout,Menu,Input,} from 'antd'
 import { Index,Detail,Login,Regist } from './pages/index';
 
 
@@ -16,10 +9,12 @@ import routers from './router';
 import './App.css';
 
 const { Header, Content, Footer } = Layout;
+export const UserContext = createContext<any>({});
 
 function App() {
   const [activeMenuIndex,setMenuActiveIndex]=useState<string|null>(null)
   const history = useHistory()
+  const [userInfo, setUserInfo] = useState({});  
 
   const menus = routers.map(({ title, path }) => {
     return {
@@ -44,8 +39,15 @@ function App() {
       history.push(keyPath)
     }
    }
- 
+
+
+   const value = {  
+    userInfo,  
+    setUserInfo,  
+  };
+
   return (
+    <UserContext.Provider value={value}>
     <Layout className="layout">
     <Header
       style={{
@@ -69,6 +71,8 @@ function App() {
      
     </Header>
     <Content style={{ padding: '0 50px', margin: '0 auto', width: '800px' }}>
+      {/* @ts-ignore */}
+      <p>userid: {userInfo?.userId}</p>
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Home</Breadcrumb.Item>
         <Breadcrumb.Item>List</Breadcrumb.Item>
@@ -95,6 +99,7 @@ function App() {
         Ant Design ©2023 Created by Ant UED
       </Footer>
     </Layout>
+    </UserContext.Provider>
   );
 }
 

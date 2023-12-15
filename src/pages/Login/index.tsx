@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useContext } from 'react';
 import { Form, Input, Checkbox, Button, message } from 'antd';
 import { parseUrlSearchParams } from '@utils/index';
 import request from '@utils/request';
 import {useHistory} from 'react-router'
+import { UserContext } from '../../App';  
+
 import './style.css';
 
-const Detail: React.FC = () => {
-
+const Login: React.FC = () => {
+  const userContext = React.useContext(UserContext);
+  const { userInfo, setUserInfo } = userContext;
   const [form]=Form.useForm()
   const history=useHistory()
 
@@ -21,11 +24,12 @@ const Detail: React.FC = () => {
     console.log('values',values)
     try{
     const {username,password}=values
-      const {retCode}=await request('/login/','post',{username,password})
+      const {retCode,userId}=await request('/login/','post',{username,password})
       if(retCode>0){
         message.error(retCode===1?"账户或密码错误，请重新输入！":"用户不存在")
       }else{
         message.success("登陆成功")
+        setUserInfo({userId})
         history.push('/')
       }
     }catch(err){
@@ -80,4 +84,4 @@ const Detail: React.FC = () => {
   );
 };
 
-export default Detail;
+export default Login;
