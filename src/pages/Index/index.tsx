@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import {Link} from 'react-router-dom'
 import {
   Table,
   Button,
@@ -18,6 +19,14 @@ const layout = {
 const App: React.FC = () => {
   const [form] = Form.useForm();
 
+  const queryStockList=()=>{
+
+  }
+
+
+  useEffect(()=>{
+  queryStockList()
+  },[])
 
 
   const columns = [
@@ -48,13 +57,15 @@ const App: React.FC = () => {
     },
     {
       title: '操作',
-      dataIndex: 'operation',
-      key: 'operation',
-      render: () => {
+      dataIndex: 'code',
+      key: 'code',
+      render: (code:string) => {
         return (
           <div className="table_ops_wrapper">
             <Button type="link">删除</Button>
-            <Button type="link">详情</Button>
+            <Button type="link">
+              <Link to={`/detail?code=${code}`} target='_blank'>详情</Link>
+              </Button>
             <Button type="link">预测</Button>
           </div>
         );
@@ -78,7 +89,7 @@ const App: React.FC = () => {
 
           <div className="list">
             <div className="home_search_block">
-              <Form
+              {/* <Form
                 {...layout}
                 form={form}
                 name="control-hooks"
@@ -98,7 +109,8 @@ const App: React.FC = () => {
                     </Button>
                   </Form.Item>
                 </Row>
-              </Form>
+              </Form> */}
+              
             </div>
             <Table columns={columns} dataSource={mockdata} />
           </div>

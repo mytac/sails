@@ -1,5 +1,5 @@
-import React from 'react';
-import {Route,Redirect,Switch,BrowserRouter} from 'react-router-dom'
+import React,{useState} from 'react';
+import {Route,Redirect,Switch,BrowserRouter,useHistory} from 'react-router-dom'
 import {  Breadcrumb,
   Layout,
   Menu,
@@ -8,8 +8,8 @@ import {  Breadcrumb,
   Form,
   Input,
   Row,} from 'antd'
-import { Index,Detail } from './pages/index';
-import 'antd/dist/antd.css';
+import { Index,Detail,Login,Regist } from './pages/index';
+
 
 import routers from './router';
 
@@ -18,15 +18,31 @@ import './App.css';
 const { Header, Content, Footer } = Layout;
 
 function App() {
+  const [activeMenuIndex,setMenuActiveIndex]=useState<string|null>(null)
+  const history = useHistory()
+
   const menus = routers.map(({ title, path }) => {
     return {
       key: title,
       label: title,
+      keyPath:path
     };
   });
+
+  if(activeMenuIndex===null&&menus.length){
+    setMenuActiveIndex(menus[0]?.key)
+  }
    // 搜索股票，进入股票详情页
    const onSearchStock=()=>{
 
+   }
+
+   // @ts-ignore
+   const onMenuClick=({  key, keyPath })=>{
+    setMenuActiveIndex(key)
+    if(history){
+      history.push(keyPath)
+    }
    }
  
   return (
@@ -39,14 +55,16 @@ function App() {
       }}
     >
       <div className="top_inner">
+      <Input.Search placeholder="请输入股票名称" className='top_input_wrapper' onSearch={onSearchStock}/>
+
       <Menu
         className='menu_wrapper'
         theme="dark"
         mode="horizontal"
         defaultSelectedKeys={[routers[0].title]}
         items={menus}
+        onClick={onMenuClick}
       />
-      <Input.Search placeholder="请输入股票名称" className='top_input_wrapper' onSearch={onSearchStock}/>
       </div>
      
     </Header>
@@ -59,11 +77,14 @@ function App() {
 
       <div className="site-layout-content">
       <BrowserRouter>
-            <Route path="/" component={Index}/>
-            <Route path="/detail" component={Detail}/>
-            {/* <Route path="/getAllScore" component={AllStudent}/> */}
+          <Switch>
+            <Route path="/" component={Index} exact/>
+            <Route path="/login" component={Login} exact/>
+            <Route path="/detail" component={Detail} exact/>
+            <Route path="/regist" component={Regist} exact/>
             {/* 一般写在所有路由注册的最下方，当所有路由都无法匹配时，跳转到Redirect指定的路由 */}
-            {/* <Redirect to="/insetScore"/> */}
+            {/* <Redirect to="/index"/> */}
+            </Switch>
         </BrowserRouter>
 
       </div>

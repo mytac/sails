@@ -7,7 +7,7 @@ interface Router {
 
 const routers: Array<Router> = [
   { title: '首页', path: './index'},
-  // { title: '账户管理', path: './account' },
+  { title: '账户管理', path: './account' },
   // { title: '详情', path: './detail', hideInMenu:true },
 ];
 
