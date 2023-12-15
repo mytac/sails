@@ -1,37 +1,34 @@
-import React, { useEffect,useState } from 'react';
-import {Link} from 'react-router-dom'
-import {Table,Button,message} from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Table, Button, message, Modal, Form, Row, Input } from 'antd';
 import request from '@utils/request';
 import { mockdata } from './config';
-import { UserContext } from '../../App';  
+import { UserContext } from '../../App';
 
 import './style.css';
 
-
 const App: React.FC = () => {
   const userContext = React.useContext(UserContext);
+  const [form] = Form.useForm();
   const { userInfo } = userContext;
 
-  const [stockList,setStockList]=useState([])
+  const [stockList, setStockList] = useState([]);
+  const [visible, setVisible] = useState(false);
 
-  const queryStockList=async ()=>{
-    try{
-      if(userInfo?.userId){
-        const {stockList}=await request('/selectStock/','post',{})
-        setStockList(stockList)
-      }else{
-        message.error("请先登录查看自选股")
+  const queryStockList = async () => {
+    try {
+      if (userInfo?.userId) {
+        const { stockList } = await request('/selectStock/', 'post', {});
+        setStockList(stockList);
+      } else {
+        message.error('请先登录查看自选股');
       }
-      
-    }catch(err){
-    }
-  }
+    } catch (err) {}
+  };
 
-
-  useEffect(()=>{
-  queryStockList()
-  },[])
-
+  useEffect(() => {
+    queryStockList();
+  }, []);
 
   const columns = [
     {
@@ -63,13 +60,15 @@ const App: React.FC = () => {
       title: '操作',
       dataIndex: 'ts_code',
       key: 'ts_code',
-      render: (code:string) => {
+      render: (code: string) => {
         return (
           <div className="table_ops_wrapper">
-            <Button type="link">删除</Button>
+            <Button type="link" onClick={onDel.bind(null,code)}>删除</Button>
             <Button type="link">
-              <Link to={`/detail?code=${code}`} target='_blank'>详情</Link>
-              </Button>
+              <Link to={`/detail?code=${code}`} target="_blank">
+                详情
+              </Link>
+            </Button>
             <Button type="link">预测</Button>
           </div>
         );
@@ -77,48 +76,61 @@ const App: React.FC = () => {
     },
   ];
 
-  const onFinish = (values: any) => {
-    console.log(values);
+  const isLogin=userInfo?.userId
+
+  // 添加自选股
+  const onFinish = async (values: any) => {
+    const {ts_code}=values
+    try {
+      if (isLogin) {
+        await request(`/stock/selectStock/addStock/${userInfo?.userId}/${ts_code}`, 'get', {});
+        message.success("自选股添加成功")
+      } else {
+        message.error('请先登录查看自选股');
+      }
+    } catch (err) {}
   };
 
- 
-  return (
-    
-        <>
-          <div className="head">
-            <div className="head_stock">沪深</div>
-            <div className="head_stock">沪深</div>
-            <div className="head_stock">沪深</div>
-          </div>
+  // 删除股票
+  const onDel=async (ts_code:string)=>{
+    try {
+      if (isLogin) {
+        await request(`/stock/selectStock/delStock/${userInfo?.userId}/${ts_code}`, 'get', {});
+        message.success("自选股删除成功")
+      } else {
+        message.error('请先登录查看自选股');
+      }
+    } catch (err) {}
+  }
 
-          <div className="list">
-            <div className="home_search_block">
-              {/* <Form
-                {...layout}
-                form={form}
-                name="control-hooks"
-                onFinish={onFinish}
-              >
-                <Row>
-                  <Form.Item
-                    name="code"
-                    label="股票"
-                    rules={[{ required: true }]}
-                  >
-                    <Input placeholder="请输入股票名称" />
-                  </Form.Item>
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      搜索
-                    </Button>
-                  </Form.Item>
-                </Row>
-              </Form> */}
-              
-            </div>
-            <Table columns={columns} dataSource={stockList} />
-          </div>
-        </>
+  return (
+    <>
+      <div className="head">
+        <div className="head_stock">沪深</div>
+        <div className="head_stock">沪深</div>
+        <div className="head_stock">沪深</div>
+      </div>
+
+      <div className="list">
+        <Button onClick={setVisible.bind(null,true)} className='add-btn'>添加自选</Button>
+        <Table columns={columns} dataSource={stockList} />
+      </div>
+
+      <Modal title="添加自选股" open={visible} footer={null} onCancel={setVisible.bind(null,false)}>
+        <Form form={form} name="control-hooks" onFinish={onFinish}>
+          <Row>
+            <Form.Item name="ts_code" label="股票" rules={[{ required: true }]}>
+              <Input placeholder="请输入股票代码" />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                添加
+              </Button>
+            </Form.Item>
+          </Row>
+        </Form>
+      </Modal>
+    </>
   );
 };
 

@@ -22,6 +22,10 @@
     margin: 0 10px;
   }
 
+  .list>.add-btn{
+    margin: 10px 0;
+  }
+
   .home_search_block {
     margin: 10px 0;
     .ant-form-item {
