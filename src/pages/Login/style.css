@@ -1,0 +1,7 @@
+.login_page{
+    max-width: 500px;
+    margin: 30px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

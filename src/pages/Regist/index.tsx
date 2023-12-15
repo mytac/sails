@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Button,message } from 'antd';
+import {useHistory} from 'react-router'
 import { parseUrlSearchParams } from '@utils/index';
 import request from '@utils/request';
-import {useHistory} from 'react-router'
 import './style.css';
 
 const Regist: React.FC = () => {
