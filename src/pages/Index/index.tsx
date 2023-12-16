@@ -71,7 +71,7 @@ const App: React.FC = () => {
           <div className="table_ops_wrapper">
             <Button type="link" onClick={onDel.bind(null,code)}>删除</Button>
             <Button type="link">
-              <Link to={`/detail?code=${code}`} target="_blank">
+              <Link to={`/detail?ts_code=${code}`} target="_blank">
                 详情
               </Link>
             </Button>

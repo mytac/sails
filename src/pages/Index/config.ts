@@ -1,5 +1,8 @@
 import { Button } from 'antd';
 
-const mockdata = [{ name: '赛力斯', ts_code: 'SH601127',close:85.99,pct_chg:4.29,industry:'汽车' }];
+const mockdata = [
+    
+    { name: '平安银行', ts_code: '000001.SZ',close:9.21,pct_chg:0.06,industry:'银行',open:9.2 },
+];
 
 export { mockdata };

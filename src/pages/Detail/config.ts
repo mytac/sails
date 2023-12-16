@@ -11,4 +11,16 @@ const mockdata = {
     amount:'1'
 };
 
-export { mockdata };
+const ATTR_MAP={
+    ts_code:'股票代码',
+    name:'股票名称',
+    industry:'行业',
+    open:'开盘价',
+    close:'收盘价',
+    change:'涨跌幅',
+    area:'地域',
+    list_date:'上市日期',
+    vol:'市值'
+}
+
+export { mockdata,ATTR_MAP };

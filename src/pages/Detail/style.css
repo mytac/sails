@@ -1,0 +1,9 @@
+.detail_page{
+    padding: 10px;
+}
+
+.chart{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
