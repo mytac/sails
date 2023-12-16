@@ -4,6 +4,7 @@ import { Table, Button, message, Modal, Form, Row, Input } from 'antd';
 import request from '@utils/request';
 import { mockdata } from './config';
 import { UserContext } from '../../App';
+import StockBadge from '@component/StockBadge'
 
 import './style.css';
 
@@ -19,11 +20,16 @@ const App: React.FC = () => {
     try {
       if (userInfo?.userId) {
         const { stockList } = await request('/selectStock/', 'post', {});
-        setStockList(stockList);
+        //@ts-ignore
+        setStockList(mockdata);
+        // setStockList(stockList);
       } else {
         message.error('请先登录查看自选股');
       }
-    } catch (err) {}
+    } catch (err) {
+        //@ts-ignore
+        setStockList(mockdata);
+    }
   };
 
   useEffect(() => {
@@ -78,6 +84,17 @@ const App: React.FC = () => {
 
   const isLogin=userInfo?.userId
 
+  const queryStock= async (ts_code:string)=>{
+    try {
+      if (isLogin) {
+        await request(`/stock/selectStock/addStock/${userInfo?.userId}/${ts_code}`, 'get', {});
+        message.success("自选股添加成功")
+      } else {
+        message.error('请先登录查看自选股');
+      }
+    } catch (err) {}
+  }
+
   // 添加自选股
   const onFinish = async (values: any) => {
     const {ts_code}=values
@@ -106,13 +123,13 @@ const App: React.FC = () => {
   return (
     <>
       <div className="head">
-        <div className="head_stock">沪深</div>
-        <div className="head_stock">沪深</div>
-        <div className="head_stock">沪深</div>
+      <StockBadge title="上证指数" value={2942.56} changeRatio={-0.56} changeValue={-16.43}/>
+      <StockBadge title="深证成指" value={2942.56} changeRatio={-0.35} changeValue={-32.64}/>
+      <StockBadge title="创业板指" value={2942.56} changeRatio={-0.65} changeValue={-12.01}/>
       </div>
 
       <div className="list">
-        <Button onClick={setVisible.bind(null,true)} className='add-btn'>添加自选</Button>
+        <Button onClick={setVisible.bind(null,true)} className='add-btn' type='primary'>添加自选</Button>
         <Table columns={columns} dataSource={stockList} />
       </div>
 

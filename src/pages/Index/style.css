@@ -5,17 +5,9 @@
   flex-direction: column;
   .head {
     width: 100%;
-    background-color: #eee8aa;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-  }
-
-  .head_stock {
-    background-color: aquamarine;
-    flex: 1;
-    height: 100px;
-    margin: 0 2px;
   }
 
   .list {

@@ -1,0 +1,27 @@
+.head_stock {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1;
+    height: 100px;
+    margin: 0 2px;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 10px 0;
+    box-shadow: 1px 1px 1px 1px #dddd;
+}
+
+.head_stock  .title{
+  font-size: 14px;
+    margin: 0;
+}
+.head_stock  .value{
+  margin: 2px 0 0;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.16666667;
+  color: red;
+}
+.head_stock  .change{
+  font-size: 12px;
+  color: red;
+}

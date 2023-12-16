@@ -73,11 +73,11 @@ function App() {
     <Content style={{ padding: '0 50px', margin: '0 auto', width: '800px' }}>
       {/* @ts-ignore */}
       <p>userid: {userInfo?.userId}</p>
-      <Breadcrumb style={{ margin: '16px 0' }}>
+      {/* <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Home</Breadcrumb.Item>
         <Breadcrumb.Item>List</Breadcrumb.Item>
         <Breadcrumb.Item>App</Breadcrumb.Item>
-      </Breadcrumb>
+      </Breadcrumb> */}
 
       <div className="site-layout-content">
       <BrowserRouter>
